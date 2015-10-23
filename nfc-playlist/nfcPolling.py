@@ -52,8 +52,8 @@ sys.stderr = MyLogger(logger, logging.ERROR)
 
 # read json file which contains key/value pairs of card id and playlist name
 fileName = os.path.join(os.path.dirname(__file__), 'data.json')
-if not os.path.isfile(fileName):
-    file(fileName, 'w').close()
+# if not os.path.isfile(fileName):
+#    file(fileName, 'w').close()
 
 with open(fileName) as dataFile:
     data = json.load(dataFile)
@@ -88,6 +88,7 @@ while True:
     except nxppy.SelectError:
         # no card detected; but uid current in use?
         if uidCurrent is not None:
+            uidCurrent = None
             client = MPDClient()
             client.connect(MPD_HOST, MPD_PORT)
             client.stop()
