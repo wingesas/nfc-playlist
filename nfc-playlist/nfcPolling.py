@@ -70,11 +70,11 @@ while True:
                 client.clear()
 
                 # call mpc with data[uid]
-                playlist = data[uid].get("playlist") if data[uid].get("playlist") else data[uid]
-                method = data[uid].get("method")
+                playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
+                method = data[uid].get("method") if hasattr(data[uid], "get") else "load"
 
                 try:
-                    if (method or method == "load"):
+                    if (method == "load"):
                         client.load(data[uid])
                     else:
                         client.add(data[uid])
