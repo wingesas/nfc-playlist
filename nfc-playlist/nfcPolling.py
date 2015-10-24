@@ -64,7 +64,7 @@ while True:
 
         if uidCurrent != uid:  # not same card as before?
             uidCurrent = uid
-            logger.info("new card " + str(uid))
+            logger.info("uid: " + str(uid))
 
             if uid in data.keys():
                 client = mpd.MPDClient()
@@ -78,9 +78,9 @@ while True:
 
                 try:
                     if (method == "load"):
-                        client.load(data[uid])
+                        client.load(playlist)
                     else:
-                        client.add(data[uid])
+                        client.add(playlist)
 
                     client.play()
                 except mpd.CommandError, e:
@@ -98,6 +98,7 @@ while True:
     except nxppy.SelectError:
         # no card detected; but uid current in use?
         if uidCurrent is not None:
+            logger.info("playlist stop")
             uidCurrent = None
             client = mpd.MPDClient()
             client.connect(MPD_HOST, MPD_PORT)
