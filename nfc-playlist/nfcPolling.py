@@ -8,7 +8,7 @@ import time
 import nxppy
 import json
 import os
-from mpd import MPDClient
+import mpd
 
 # Deafults
 LOG_FILENAME = "/tmp/nfcPolling.log"
@@ -38,7 +38,6 @@ logger.addHandler(handler)
 # Make a class we can use to capture stdout and sterr in the log
 class MyLogger(object):
     def __init__(self, logger, level):
-        """Needs a logger and a logger level."""
         self.logger = logger
         self.level = level
 
@@ -52,8 +51,6 @@ sys.stderr = MyLogger(logger, logging.ERROR)
 
 # read json file which contains key/value pairs of card id and playlist name
 fileName = os.path.join(os.path.dirname(__file__), 'data.json')
-# if not os.path.isfile(fileName):
-#    file(fileName, 'w').close()
 
 with open(fileName) as dataFile:
     data = json.load(dataFile)
@@ -68,13 +65,23 @@ while True:
         if uidCurrent != uid:  # not same card as before?
             uidCurrent = uid
             if uid in data.keys():
-                client = MPDClient()
+                client = mpd.MPDClient()
                 client.connect(MPD_HOST, MPD_PORT)
+                client.clear()
 
                 # call mpc with data[uid]
-                client.clear()
-                client.load(data[uid])
-                client.play()
+                playlist = data[uid].get("playlist") if data[uid].get("playlist") else data[uid]
+                method = data[uid].get("method")
+
+                try:
+                    if (method or method == "load"):
+                        client.load(data[uid])
+                    else:
+                        client.add(data[uid])
+
+                    client.play()
+                except mpd.CommandError, e:
+                    logger.info("CommandError " + str(e))
 
                 # shutdown
                 client.close()
@@ -89,7 +96,7 @@ while True:
         # no card detected; but uid current in use?
         if uidCurrent is not None:
             uidCurrent = None
-            client = MPDClient()
+            client = mpd.MPDClient()
             client.connect(MPD_HOST, MPD_PORT)
             client.stop()
             client.close()
