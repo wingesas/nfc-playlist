@@ -64,6 +64,8 @@ while True:
 
         if uidCurrent != uid:  # not same card as before?
             uidCurrent = uid
+            logger.info("new card " + str(uid))
+
             if uid in data.keys():
                 client = mpd.MPDClient()
                 client.connect(MPD_HOST, MPD_PORT)
@@ -72,6 +74,7 @@ while True:
                 # call mpc with data[uid]
                 playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
                 method = data[uid].get("method") if hasattr(data[uid], "get") else "load"
+                logger.info("playlist: " + str(playlist))
 
                 try:
                     if (method == "load"):
