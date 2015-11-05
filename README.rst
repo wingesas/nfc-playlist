@@ -1,32 +1,15 @@
 nfc-playlist
 ============
 
-.. image:: https://pypip.in/v/nfc-playlist/badge.png
-    :target: https://pypi.python.org/pypi/nfc-playlist
-    :alt: Latest PyPI version
-
-.. image:: https://travis-ci.org/borntyping/cookiecutter-pypackage-minimal.png
-   :target: https://travis-ci.org/borntyping/cookiecutter-pypackage-minimal
-   :alt: Latest Travis CI build status
-
-An opinionated, minimal cookiecutter template for Python packages
-
-Usage
------
-
 Installation
 ------------
 
-Requirements
-^^^^^^^^^^^^
+cp nfcPlaylist.py /usr/local/bin
+chmod 755 /usr/local/bin/nfcPlaylist.py
 
-Compatibility
--------------
+cp nfcPlaylist.sh /etc/init.d
+chmod 755 /etc/init.d/nfcPlaylist.sh
 
-Licence
--------
+/etc/init.d/myservice.sh start
 
-Authors
--------
-
-`nfc-playlist` was written by `wingesas <wingesas@gmail.com>`_.
+tail -f /tmp/nfcPlaylist.log

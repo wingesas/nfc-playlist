@@ -2,7 +2,6 @@
 
 import logging
 import logging.handlers
-import argparse
 import sys
 import time
 import nxppy
@@ -13,26 +12,15 @@ import fnmatch
 from mutagen.easyid3 import EasyID3
 
 # Deafults
-LOG_FILENAME = "/tmp/nfcPolling.log"
-LOG_LEVEL = logging.INFO  # "DEBUG" or "WARNING"
+LOG_FILENAME = "/tmp/nfcPlaylist.log"
 MPD_HOST = "localhost"
 MPD_PORT = "6600"
 
-# Define and parse command line arguments
-parser = argparse.ArgumentParser(description="NXP NFC Polling - Python service")
-parser.add_argument("-l", "--log", help="file to write log to (default '" + LOG_FILENAME + "')")
-
-# If the log file is specified on the command line then override the default
-args = parser.parse_args()
-if args.log:
-    LOG_FILENAME = args.log
-
 logger = logging.getLogger(__name__)
-logger.setLevel(LOG_LEVEL)
+logger.setLevel(logging.INFO)
 
 # Make a handler that writes to a file, making a new file at midnight and keeping 3 backups
 handler = logging.handlers.TimedRotatingFileHandler(LOG_FILENAME, when="midnight", backupCount=3)
-
 formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
@@ -50,6 +38,8 @@ class MyLogger(object):
 
 sys.stdout = MyLogger(logger, logging.INFO)
 sys.stderr = MyLogger(logger, logging.ERROR)
+
+logger.info('starting ...')
 
 # create playlists
 mediaDir = '/music/Network/mp3'
@@ -74,6 +64,7 @@ with open(fileName) as dataFile:
 
 uidCurrent = None  # current uid of detected card
 mifare = nxppy.Mifare()
+logger.info('ready - waiting for mifare ...')
 
 while True:
     try:
@@ -101,7 +92,7 @@ while True:
 
                     client.play()
                 except mpd.CommandError, e:
-                    logger.info("CommandError " + str(e))
+                    logger.error("CommandError " + str(e))
 
                 # shutdown
                 client.close()
