@@ -16,7 +16,8 @@ setuptools.setup(
     install_requires=[
         'setuptools',
         'nxppy >= 1.3.2',
-        'python-mpd2 >= 0.5.4'
+        'python-mpd2 >= 0.5.4',
+        'mutagen >= 1.3.1'
     ],
 
     classifiers=[
