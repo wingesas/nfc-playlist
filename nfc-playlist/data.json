@@ -1,10 +1,11 @@
 {
-  "04C39A1A0A4080":{
-    "playlist":"http://www.antenne.de/webradio/antenne.m3u",
-    "method":"add"
-  },
-  "04C84DC2373084":"toby",
-  "04689A1A0A4080":"Katy Perry — Teenage Dream",
-  "04299A1A0A4080":"garth brooks",
-  "04289A1A0A4080":"alan"
+    "04C39A1A0A4080": {
+        "playlist": "http://www.antenne.de/webradio/antenne.m3u",
+        "method": "add"
+    },
+    "04289A1A0A4080": "Brad Paisley - 5th Gear",
+    "04689A1A0A4080": "Garth Brooks - Fresh Horses",
+    "0409991A0A4080": "Joe Nichols - III",
+    "04299A1A0A4080": "Joe Nichols - Real Things",
+    "044A9A1A0A4080": "Brad Paisley - Play"
 }
