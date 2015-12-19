@@ -8,6 +8,7 @@ import nxppy
 import json
 import os
 import mpd
+from pygame import mixer
 
 # Deafults
 LOG_FILENAME = "/tmp/nfcPlaylist.log"
@@ -38,6 +39,7 @@ sys.stdout = MyLogger(logger, logging.INFO)
 sys.stderr = MyLogger(logger, logging.ERROR)
 
 logger.info('starting ...')
+mixer.init()
 
 # read json file which contains key/value pairs of card id and playlist name
 fileName = os.path.join(os.path.dirname(__file__), 'data.json')
@@ -61,6 +63,8 @@ while True:
                 client = mpd.MPDClient()
                 client.connect(MPD_HOST, MPD_PORT)
                 client.clear()
+                mixer.music.load(os.path.join(os.path.dirname(__file__), 'beep.mp3'))
+                mixer.music.play()
 
                 # call mpc with data[uid]
                 playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
@@ -96,5 +100,7 @@ while True:
             client.stop()
             client.close()
             client.disconnect()
+            mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
+            mixer.music.play()
 
     time.sleep(1)
