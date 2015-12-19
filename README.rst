@@ -1,26 +1,18 @@
 nfc-playlist
 ============
 
-Installation
-------------
+Install::
+    git clone https://github.com/wingesas/nfc-playlist.git
+    cd nfc-playlist
+    pip install .
 
-git clone https://github.com/wingesas/nfc-playlist.git
+    cp nfc-playlist/{nfcPlaylist.py,data.json,beep.mp3,beepDouble.mp3} /usr/local/bin
+    chmod 755 /usr/local/bin/nfcPlaylist.py
 
-cd nfc-playlist
-pip install .
+    cp nfcPlaylist.sh /etc/init.d
+    chmod 755 /etc/init.d/nfcPlaylist.sh
 
-cp nfc-playlist/nfcPlaylist.py /usr/local/bin
+    update-rc.d nfcPlaylist.sh defaults
 
-cp nfc-playlist/data.json /usr/local/bin
-
-chmod 755 /usr/local/bin/nfcPlaylist.py
-
-cp nfcPlaylist.sh /etc/init.d
-
-chmod 755 /etc/init.d/nfcPlaylist.sh
-
-update-rc.d nfcPlaylist.sh defaults
-
-/etc/init.d/nfcPlaylist.sh start
-
-tail -f /tmp/nfcPlaylist.log
+    /etc/init.d/nfcPlaylist.sh start
+    tail -f /tmp/nfcPlaylist.log
