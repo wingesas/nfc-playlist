@@ -55,7 +55,7 @@ while True:
     try:
         uid = mifare.select()
 
-        if uidCurrent != uid:  # not same card as before?
+        if uidCurrent != uid and uid is not None:  # not same card as before?
             uidCurrent = uid
             logger.info("uid: " + str(uid))
 
