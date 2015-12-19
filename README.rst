@@ -2,6 +2,7 @@ nfc-playlist
 ============
 
 Install::
+
     git clone https://github.com/wingesas/nfc-playlist.git
     cd nfc-playlist
     pip install .
