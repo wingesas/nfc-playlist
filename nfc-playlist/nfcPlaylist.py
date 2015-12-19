@@ -94,13 +94,13 @@ while True:
         # no card detected; but uid current in use?
         if uidCurrent is not None:
             logger.info("playlist stop")
+            mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
+            mixer.music.play()
             uidCurrent = None
             client = mpd.MPDClient()
             client.connect(MPD_HOST, MPD_PORT)
             client.stop()
             client.close()
             client.disconnect()
-            mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
-            mixer.music.play()
 
     time.sleep(1)
