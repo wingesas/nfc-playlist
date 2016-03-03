@@ -45,7 +45,7 @@ sys.stderr = MyLogger(logger, logging.ERROR)
 logger.info('starting ...')
 
 GPIO.setmode(GPIO.BOARD)
-GPIO.setwarnings(False)
+# GPIO.setwarnings(False)
 
 GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
@@ -65,13 +65,14 @@ logger.info('ready - waiting for mifare ...')
 while True:
     try:
         uid = mifare.select()
+        logger.info("uid: " + str(uid))
 
         if uid is not None:  # not same card as before?
             logger.info("uid: " + str(uid))
 
             if uid in data.keys():
-                mixer.music.load(os.path.join(os.path.dirname(__file__), 'beep.mp3'))
-                mixer.music.play()
+                # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beep.mp3'))
+                # mixer.music.play()
 
                 client = mpd.MPDClient()
                 client.connect(MPD_HOST, MPD_PORT)
@@ -118,8 +119,8 @@ while True:
 
         if GPIO.input(BUTTON_PAUSE) is False:
             logger.info('button pause pressed')
-            mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
-            mixer.music.play()
+            # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
+            # mixer.music.play()
             # client.pause()
             # MPDClient.pause(pause)
             # Toggles pause/resumes playing, PAUSE is 0 or 1.
