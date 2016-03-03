@@ -9,15 +9,11 @@ import json
 import os
 import mpd
 from pygame import mixer
-import RPi.GPIO as GPIO
 
 # Deafults
 LOG_FILENAME = "/tmp/nfcPlaylist.log"
-MPD_HOST = "raspi2"
+MPD_HOST = "localhost"
 MPD_PORT = "6600"
-BUTTON_PREV = 8
-BUTTON_NEXT = 10
-BUTTON_PAUSE = 18
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -43,14 +39,6 @@ sys.stdout = MyLogger(logger, logging.INFO)
 sys.stderr = MyLogger(logger, logging.ERROR)
 
 logger.info('starting ...')
-
-GPIO.setmode(GPIO.BOARD)
-# GPIO.setwarnings(False)
-
-GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
-GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
-# GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
-
 mixer.init()
 
 # read json file which contains key/value pairs of card id and playlist name
@@ -59,24 +47,24 @@ fileName = os.path.join(os.path.dirname(__file__), 'data.json')
 with open(fileName) as dataFile:
     data = json.load(dataFile)
 
+uidCurrent = None  # current uid of detected card
 mifare = nxppy.Mifare()
 logger.info('ready - waiting for mifare ...')
 
 while True:
     try:
         uid = mifare.select()
-        logger.info("uid: " + str(uid))
 
-        if uid is not None:  # not same card as before?
+        if uidCurrent != uid and uid is not None:  # not same card as before?
+            uidCurrent = uid
             logger.info("uid: " + str(uid))
 
             if uid in data.keys():
-                # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beep.mp3'))
-                # mixer.music.play()
-
                 client = mpd.MPDClient()
                 client.connect(MPD_HOST, MPD_PORT)
                 client.clear()
+                mixer.music.load(os.path.join(os.path.dirname(__file__), 'beep.mp3'))
+                mixer.music.play()
 
                 # call mpc with data[uid]
                 playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
@@ -103,32 +91,16 @@ while True:
                     json.dump(data, outFile, indent=4)
 
     except nxppy.SelectError:
-        pass
-
-    if GPIO.input(BUTTON_PREV) is False or GPIO.input(BUTTON_NEXT) is False or GPIO.input(BUTTON_PAUSE) is False:
-        client = mpd.MPDClient()
-        client.connect(MPD_HOST, MPD_PORT)
-
-        if GPIO.input(BUTTON_PREV) is False:
-            logger.info('button prev pressed')
-            client.previous()
-
-        if GPIO.input(BUTTON_NEXT) is False:
-            logger.info('button next pressed')
-            client.next()
-
-        if GPIO.input(BUTTON_PAUSE) is False:
-            logger.info('button pause pressed')
-            # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
-            # mixer.music.play()
-            # client.pause()
-            # MPDClient.pause(pause)
-            # Toggles pause/resumes playing, PAUSE is 0 or 1.
-
-            # MPDClient.stop()
-            # Stops playing.
-
-        client.close()
-        client.disconnect()
+        # no card detected; but uid current in use?
+        if uidCurrent is not None:
+            logger.info("playlist stop")
+            mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
+            mixer.music.play()
+            uidCurrent = None
+            client = mpd.MPDClient()
+            client.connect(MPD_HOST, MPD_PORT)
+            client.stop()
+            client.close()
+            client.disconnect()
 
     time.sleep(1)
