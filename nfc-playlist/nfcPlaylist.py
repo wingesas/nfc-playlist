@@ -15,9 +15,9 @@ import RPi.GPIO as GPIO
 LOG_FILENAME = "/tmp/nfcPlaylist.log"
 MPD_HOST = "raspi2"
 MPD_PORT = "6600"
-# BUTTON_PREV = 8
-# BUTTON_NEXT = 10
-BUTTON_PAUSE = 24
+BUTTON_PREV = 7
+BUTTON_NEXT = 13
+BUTTON_PAUSE = 18
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -44,7 +44,7 @@ sys.stderr = MyLogger(logger, logging.ERROR)
 
 logger.info('starting ...')
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 # GPIO.setwarnings(False)
 
 # GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
