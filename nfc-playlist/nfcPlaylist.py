@@ -16,8 +16,8 @@ LOG_FILENAME = "/tmp/nfcPlaylist.log"
 MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 BUTTON_PREV = 7
-BUTTON_NEXT = 13
-BUTTON_PAUSE = 18
+BUTTON_NEXT = 8
+BUTTON_PAUSE = 13
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -47,8 +47,8 @@ logger.info('starting ...')
 GPIO.setmode(GPIO.BOARD)
 # GPIO.setwarnings(False)
 
-# GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
-# GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
+GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
+GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
 
 mixer.init()
@@ -105,22 +105,21 @@ while True:
     except nxppy.SelectError:
         pass
 
-    # if GPIO.input(BUTTON_PREV) is False or GPIO.input(BUTTON_NEXT) is False or GPIO.input(BUTTON_PAUSE) is False:
-    if GPIO.input(BUTTON_PAUSE) is False:
+    if GPIO.input(BUTTON_PREV) is False or GPIO.input(BUTTON_NEXT) is False or GPIO.input(BUTTON_PAUSE) is False:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
 
-        # if GPIO.input(BUTTON_PREV) is False:
-        #     logger.info('button prev pressed')
-        #     client.previous()
+        if GPIO.input(BUTTON_PREV) is False:
+            logger.info('button prev pressed')
+            client.previous()
 
-        # if GPIO.input(BUTTON_NEXT) is False:
-        #     logger.info('button next pressed')
-        #     client.next()
+        if GPIO.input(BUTTON_NEXT) is False:
+            logger.info('button next pressed')
+            client.next()
 
         if GPIO.input(BUTTON_PAUSE) is False:
             logger.info('button pause pressed')
-            client.next()
+            client.pause(0)
             # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
             # mixer.music.play()
             # client.pause()
