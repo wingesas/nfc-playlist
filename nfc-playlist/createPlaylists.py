@@ -16,5 +16,5 @@ for root, dirs, files in os.walk(mediaDir):
         if len(matches) > 0:
             audio = EasyID3(os.path.join(root, matches[0]))
             with open(os.path.join(playlistsDir, audio['artist'][0] + ' - ' + audio['album'][0] + '.m3u'), 'wb') as m3u:
-                for match in matches:
+                for match in sorted(matches):
                     m3u.write(os.path.join(root, match) + '\n')

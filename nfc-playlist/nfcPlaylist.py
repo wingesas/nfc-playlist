@@ -45,11 +45,13 @@ sys.stderr = MyLogger(logger, logging.ERROR)
 logger.info('starting ...')
 
 GPIO.setmode(GPIO.BOARD)
-# GPIO.setwarnings(False)
-
 GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
+
+isButtonPrevPressed = False
+isButtonNextPressed = False
+isButtonPausePressed = False
 
 mixer.init()
 
@@ -105,31 +107,37 @@ while True:
     except nxppy.SelectError:
         pass
 
-    if GPIO.input(BUTTON_PREV) is False or GPIO.input(BUTTON_NEXT) is False or GPIO.input(BUTTON_PAUSE) is False:
+    # isButtonPrevPressed = False if GPIO.input(BUTTON_PREV) == 1 else True
+
+    if GPIO.input(BUTTON_PREV) == 0:
+        isButtonPrevPressed = True
+        logger.info('button prev pressed')
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
-
-        if GPIO.input(BUTTON_PREV) is False:
-            logger.info('button prev pressed')
-            client.previous()
-
-        if GPIO.input(BUTTON_NEXT) is False:
-            logger.info('button next pressed')
-            client.next()
-
-        if GPIO.input(BUTTON_PAUSE) is False:
-            logger.info('button pause pressed')
-            client.pause(0)
-            # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
-            # mixer.music.play()
-            # client.pause()
-            # MPDClient.pause(pause)
-            # Toggles pause/resumes playing, PAUSE is 0 or 1.
-
-            # MPDClient.stop()
-            # Stops playing.
-
+        client.previous()
         client.close()
         client.disconnect()
+
+    if GPIO.input(BUTTON_NEXT) == 0:
+        isButtonPrevPressed = True
+        logger.info('button next pressed')
+        client = mpd.MPDClient()
+        client.connect(MPD_HOST, MPD_PORT)
+        client.next()
+        client.close()
+        client.disconnect()
+
+    if GPIO.input(BUTTON_PAUSE) == 0:
+        isButtonPrevPressed = True
+        logger.info('button pause pressed')
+        # client.pause(0)
+        # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
+        # mixer.music.play()
+        # client.pause()
+        # MPDClient.pause(pause)
+        # Toggles pause/resumes playing, PAUSE is 0 or 1.
+
+        # MPDClient.stop()
+        # Stops playing.
 
     time.sleep(1)
