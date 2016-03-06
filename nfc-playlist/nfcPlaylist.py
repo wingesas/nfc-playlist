@@ -8,7 +8,7 @@ import nxppy
 import json
 import os
 import mpd
-from pygame import mixer
+# from pygame import mixer
 import RPi.GPIO as GPIO
 
 # Deafults
@@ -53,7 +53,7 @@ isButtonPrevPressed = False
 isButtonNextPressed = False
 isButtonPausePressed = False
 
-mixer.init()
+# mixer.init()
 
 # read json file which contains key/value pairs of card id and playlist name
 fileName = os.path.join(os.path.dirname(__file__), 'data.json')
