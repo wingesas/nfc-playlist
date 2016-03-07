@@ -3,18 +3,23 @@
 import RPi.GPIO as GPIO
 import time
 
+BUTTON_PREV = 7
+BUTTON_NEXT = 8
+BUTTON_PAUSE = 13
+
 GPIO.setmode(GPIO.BOARD)
+GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
+GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
+GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
 
-GPIO.setup(7, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(8, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-# 18
 while True:
-    input_state = GPIO.input(7)
-    if input_state == 0:
-        print('4 pressed')
+    if GPIO.input(BUTTON_PREV) == 0:
+        print('BUTTON_PREV')
 
-    input_state = GPIO.input(8)
-    if input_state == 0:
-        print('13 pressed')
+    if GPIO.input(BUTTON_NEXT) == 0:
+        print('BUTTON_NEXT')
+
+    if GPIO.input(BUTTON_PAUSE) == 0:
+        print('BUTTON_PAUSE')
 
     time.sleep(0.2)
