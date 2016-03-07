@@ -16,7 +16,7 @@ LOG_FILENAME = "/tmp/nfcPlaylist.log"
 MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 BUTTON_PREV = 7
-BUTTON_NEXT = 8
+BUTTON_NEXT = 18
 BUTTON_PAUSE = 13
 
 logger = logging.getLogger(__name__)
