@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 import time
 
 BUTTON_PREV = 7
-BUTTON_NEXT = 8
+BUTTON_NEXT = 18
 BUTTON_PAUSE = 13
 
 GPIO.setmode(GPIO.BOARD)
