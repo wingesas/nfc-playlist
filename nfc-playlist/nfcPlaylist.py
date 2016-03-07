@@ -19,6 +19,11 @@ BUTTON_PREV = 7
 BUTTON_NEXT = 18
 BUTTON_PAUSE = 13
 
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
+GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
+GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -43,11 +48,6 @@ sys.stdout = MyLogger(logger, logging.INFO)
 sys.stderr = MyLogger(logger, logging.ERROR)
 
 logger.info('starting ...')
-
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
-GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
-GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
 
 isButtonPrevPressed = False
 isButtonNextPressed = False
