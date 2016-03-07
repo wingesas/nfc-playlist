@@ -47,7 +47,7 @@ logger.info('starting ...')
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
-GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
+# GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
 
 isButtonPrevPressed = False
 isButtonNextPressed = False
@@ -127,9 +127,9 @@ while True:
         client.close()
         client.disconnect()
 
-    if GPIO.input(BUTTON_PAUSE) == 0:
-        isButtonPrevPressed = True
-        logger.info('button pause pressed')
+    # if GPIO.input(BUTTON_PAUSE) == 0:
+        # isButtonPrevPressed = True
+        # logger.info('button pause pressed')
         # client.pause(0)
         # mixer.music.load(os.path.join(os.path.dirname(__file__), 'beepDouble.mp3'))
         # mixer.music.play()
