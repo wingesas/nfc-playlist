@@ -1,25 +1,72 @@
 #!/usr/bin/env python2.7
 
-import RPi.GPIO as GPIO
+import logging
+import sys
 import time
+import RPi.GPIO as GPIO
+from logging.handlers import RotatingFileHandler
 
+# defaults
+LOG_FILENAME = "/tmp/nfcPlaylistTest.log"
+MPD_HOST = "raspi2"
+MPD_PORT = "6600"
+
+# GPIO buttons
 BUTTON_PREV = 7
 BUTTON_NEXT = 18
 BUTTON_PAUSE = 13
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
-GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
-GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
+logger = logging.getLogger(__name__)
 
-while True:
-    if GPIO.input(BUTTON_PREV) == 0:
-        print('BUTTON_PREV')
+def setup_logging():
+    logger.setLevel(logging.INFO)
+    handler = RotatingFileHandler(LOG_FILENAME, maxBytes=1048576, backupCount=3)  # 1024 * 1024 = 1MB
+    formatter = logging.Formatter('%(asctime)s [%(levelname)-8s] %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
-    if GPIO.input(BUTTON_NEXT) == 0:
-        print('BUTTON_NEXT')
+    # Make a class we can use to capture stdout and sterr in the log
+    class MyLogger(object):
+        def __init__(self, logger, level):
+            self.logger = logger
+            self.level = level
 
-    if GPIO.input(BUTTON_PAUSE) == 0:
-        print('BUTTON_PAUSE')
+        def write(self, message):
+            # Only log if there is a message (not just a new line)
+            if message.rstrip() != "":
+                self.logger.log(self.level, message.rstrip())
 
-    time.sleep(0.2)
+    sys.stdout = MyLogger(logger, logging.INFO)
+    sys.stderr = MyLogger(logger, logging.ERROR)
+
+def button_pressed_event(channel):
+    if channel == BUTTON_PREV:
+        logger.info('button prev pressed')
+
+    if channel == BUTTON_NEXT:
+        logger.info('button next pressed')
+
+    if channel == BUTTON_PAUSE:
+        logger.info('button pause pressed')
+
+def setup_gpio():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
+
+    GPIO.add_event_detect(BUTTON_PREV, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+
+def main():
+    setup_logging()
+    setup_gpio()
+
+    logger.info('ready - waiting for buttons ...')
+
+    while True:
+        time.sleep(0.2)
+
+if __name__ == "__main__":
+    main()
