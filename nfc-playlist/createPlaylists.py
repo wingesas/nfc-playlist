@@ -9,8 +9,8 @@ mediaDir = '/var/lib/mopidy/media/mp3'
 playlistsDir = '/var/lib/mopidy/playlists'
 
 os.system("rm " + playlistsDir + "/*.m3u")
-os.system("echo '" + playlistsDir + "/beep.mp3' > beep.m3u")
-os.system("echo '" + playlistsDir + "/beepDouble.mp3' > beepDouble.m3u")
+os.system("echo '/var/lib/mopidy/beep.mp3' > " + playlistsDir + "/beep.m3u")
+os.system("echo '/var/lib/mopidy/beepDouble.mp3' > " + playlistsDir + "/beepDouble.m3u")
 
 for root, dirs, files in os.walk(mediaDir):
     # magic marker in directory?
