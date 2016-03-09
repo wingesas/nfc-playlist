@@ -47,10 +47,8 @@ def main():
         data = json.load(dataFile)
 
     mifare = nxppy.Mifare()
-    logger.info('ready - waiting for mifare ...')
-
     uidCurrent = None  # current uid of detected card
-    i = 0
+    logger.info('ready - waiting for mifare ...')
 
     while True:
         try:
@@ -63,7 +61,6 @@ def main():
             logger.info("uid: " + str(uid))
 
             if uid in data.keys():
-                # TODO; do beep
                 client = mpd.MPDClient()
                 client.connect(MPD_HOST, MPD_PORT)
                 client.clear()
@@ -95,11 +92,7 @@ def main():
                 with open(fileName, 'w') as outFile:
                     json.dump(data, outFile, indent=4)
 
-        if i == (5 * 5):  # 5 sec.
-            uidCurrent = None  # reset
-
         time.sleep(0.2)
-        i = i + 1
 
 if __name__ == "__main__":
     main()
