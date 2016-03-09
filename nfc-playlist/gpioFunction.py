@@ -27,6 +27,7 @@ for port in ports:
     usage = GPIO.gpio_function(port)
     print "%s %d status: %s" % (pin_type, port, port_use[usage])
 
+    GPIO.setup(port, GPIO.IN, GPIO.PUD_UP)
     print GPIO.input(port)
 
     # GPIO.add_event_detect(port, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
