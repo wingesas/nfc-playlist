@@ -47,6 +47,7 @@ def main():
         data = json.load(dataFile)
 
     mifare = nxppy.Mifare()
+    uid = None
     uidCurrent = None  # current uid of detected card
     logger.info('ready - waiting for mifare ...')
 
