@@ -16,9 +16,9 @@ MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 
 # GPIO buttons
-BUTTON_PREV = 7
-BUTTON_NEXT = 18
-BUTTON_PAUSE = 13
+BUTTON_PREV = 7  # ok
+BUTTON_NEXT = 8
+BUTTON_PAUSE = 10
 
 logger = logging.getLogger(__name__)
 
