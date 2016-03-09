@@ -4,6 +4,8 @@
 
 import RPi.GPIO as GPIO
 
+# def button_pressed_event(channel):
+
 # Offer the user a choice of Pin or Port numbers and set numbering scheme accordingly
 choice = raw_input("Type 1 for Pin numbers, anything else for BCM port numbers:\n")
 if choice == "1":
@@ -24,3 +26,7 @@ port_use = {0: "GPIO.OUT", 1: "GPIO.IN", 40: "GPIO.SERIAL", 41: "GPIO.SPI", 42: 
 for port in ports:
     usage = GPIO.gpio_function(port)
     print "%s %d status: %s" % (pin_type, port, port_use[usage])
+
+    print GPIO.input(port)
+
+    # GPIO.add_event_detect(port, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
