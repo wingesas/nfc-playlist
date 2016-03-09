@@ -14,7 +14,7 @@ MPD_PORT = "6600"
 
 # GPIO buttons
 BUTTON_PREV = 7
-BUTTON_NEXT = 18
+BUTTON_NEXT = 8
 BUTTON_PAUSE = 13
 
 doPause = True
