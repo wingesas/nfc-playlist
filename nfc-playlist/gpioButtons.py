@@ -48,7 +48,7 @@ def button_pressed_event(channel):
 
     if channel == BUTTON_PREV and GPIO.input(channel) == 0:
         logger.info('button prev pressed')
-        client.prev()
+        client.previous()
 
     if channel == BUTTON_NEXT and GPIO.input(channel) == 0:
         logger.info('button next pressed')
