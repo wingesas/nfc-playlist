@@ -1,13 +1,14 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 
 import logging
 import sys
 import time
+import mpd
 import RPi.GPIO as GPIO
 from logging.handlers import RotatingFileHandler
 
 # defaults
-LOG_FILENAME = "/tmp/nfcPlaylistTest.log"
+LOG_FILENAME = "/var/log/gpioButtons.log"
 MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 
@@ -15,6 +16,8 @@ MPD_PORT = "6600"
 BUTTON_PREV = 7
 BUTTON_NEXT = 18
 BUTTON_PAUSE = 13
+
+doPause = True
 
 logger = logging.getLogger(__name__)
 
@@ -40,14 +43,23 @@ def setup_logging():
     sys.stderr = MyLogger(logger, logging.ERROR)
 
 def button_pressed_event(channel):
-    if channel == BUTTON_PREV:
+    client = mpd.MPDClient()
+    client.connect(MPD_HOST, MPD_PORT)
+
+    if channel == BUTTON_PREV and GPIO.input(channel) == 0:
         logger.info('button prev pressed')
+        client.prev()
 
-    if channel == BUTTON_NEXT:
+    if channel == BUTTON_NEXT and GPIO.input(channel) == 0:
         logger.info('button next pressed')
+        client.next()
 
-    if channel == BUTTON_PAUSE:
+    if channel == BUTTON_PAUSE and GPIO.input(channel) == 0:
         logger.info('button pause pressed')
+        client.pause()
+
+    client.close()
+    client.disconnect()
 
 def setup_gpio():
     GPIO.setmode(GPIO.BOARD)
