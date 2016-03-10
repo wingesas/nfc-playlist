@@ -65,9 +65,9 @@ def setup_gpio():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(7, GPIO.IN, GPIO.PUD_UP)
     GPIO.setup(13, GPIO.IN, GPIO.PUD_UP)
-    GPIO.setup(8, GPIO.IN, GPIO.PUD_UP)
+    # GPIO.setup(8, GPIO.IN, GPIO.PUD_UP)
 
-    GPIO.setup(10, GPIO.IN, GPIO.PUD_UP)
+    # GPIO.setup(10, GPIO.IN, GPIO.PUD_UP)
     GPIO.setup(18, GPIO.IN, GPIO.PUD_UP)
 
     # GPIO.add_event_detect(BUTTON_PREV, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
