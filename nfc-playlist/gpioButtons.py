@@ -43,36 +43,25 @@ def setup_logging():
     sys.stderr = MyLogger(logger, logging.ERROR)
 
 def button_pressed_event(channel):
-    client = mpd.MPDClient()
-    client.connect(MPD_HOST, MPD_PORT)
 
     if channel == BUTTON_PREV and GPIO.input(channel) == 0:
         logger.info('button prev pressed')
-        client.previous()
 
     if channel == BUTTON_NEXT and GPIO.input(channel) == 0:
         logger.info('button next pressed')
-        client.next()
 
     if channel == BUTTON_PAUSE and GPIO.input(channel) == 0:
         logger.info('button pause pressed')
-        client.pause()
-
-    client.close()
-    client.disconnect()
 
 def setup_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(7, GPIO.IN, GPIO.PUD_UP)
-    GPIO.setup(11, GPIO.IN, GPIO.PUD_UP)
-    # GPIO.setup(15, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 
-    # GPIO.setup(10, GPIO.IN, GPIO.PUD_UP)
-    # GPIO.setup(18, GPIO.IN, GPIO.PUD_UP)
-
-    # GPIO.add_event_detect(BUTTON_PREV, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    # GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    # GPIO.add_event_detect(BUTTON_PAUSE, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PREV, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
 
 def main():
     setup_logging()
