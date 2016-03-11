@@ -23,7 +23,6 @@ BUTTON_NEXT = 7
 logger = logging.getLogger(__name__)
 
 def button_pressed_event(channel):
-    logger.info('button_pressed_event')
     if channel == BUTTON_PREV and GPIO.input(channel) == 0:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
@@ -83,12 +82,6 @@ def main():
     setup_logging()
     setup_gpio()
 
-    while False:
-        # logger.info(GPIO.input(BUTTON_PREV))
-        logger.info(GPIO.input(BUTTON_PAUSE))
-
-        time.sleep(0.2)
-
     # read json file which contains key/value pairs of card id and playlist name
     fileName = os.path.join(os.path.dirname(__file__), 'data.json')
 
@@ -142,9 +135,6 @@ def main():
 
         except nxppy.SelectError:
             pass
-
-        # logger.info(GPIO.input(BUTTON_PREV))
-        # logger.info(GPIO.input(BUTTON_PAUSE))
 
         time.sleep(0.2)
 
