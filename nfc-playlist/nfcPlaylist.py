@@ -89,7 +89,7 @@ def main():
     with open(fileName) as dataFile:
         data = json.load(dataFile)
 
-    mifare = nxppy.Mifare()
+    # mifare = nxppy.Mifare()
 
     uidCurrent = None  # current uid of detected card
     logger.info('ready - waiting for mifare ...')
