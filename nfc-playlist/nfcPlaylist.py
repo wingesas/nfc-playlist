@@ -54,8 +54,8 @@ def setup_gpio():
     GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
     GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 
-    GPIO.add_event_detect(BUTTON_PREV, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PREV, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
     GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
 
 def setup_logging():
