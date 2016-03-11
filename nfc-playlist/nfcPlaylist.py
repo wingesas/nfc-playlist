@@ -50,7 +50,7 @@ def button_pressed_event(channel):
 
 def setup_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_UP)
+    GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_DOWN)
     GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 
