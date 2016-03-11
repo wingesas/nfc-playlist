@@ -91,15 +91,15 @@ def main():
 
     mifare = nxppy.Mifare()
 
-    # uidCurrent = None  # current uid of detected card
+    uidCurrent = None  # current uid of detected card
     logger.info('ready - waiting for mifare ...')
 
     while True:
         try:
             uid = mifare.select()
 
-            if uid is not None:  # and uidCurrent != uid:  # not same card as before?
-                # uidCurrent = uid
+            if uid is not None and uidCurrent != uid:  # not same card as before?
+                uidCurrent = uid
                 logger.info("uid: " + str(uid))
 
                 if uid in data.keys():
