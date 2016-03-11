@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 from logging.handlers import RotatingFileHandler
 
 # defaults
-LOG_FILENAME = "/var/log/gpioButtons.log"
+LOG_FILENAME = "/var/log/nfcPlaylist.log"
 MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 
