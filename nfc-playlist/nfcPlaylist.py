@@ -83,7 +83,7 @@ def main():
     setup_logging()
     setup_gpio()
 
-    while True:
+    while False:
         # logger.info(GPIO.input(BUTTON_PREV))
         logger.info(GPIO.input(BUTTON_PAUSE))
 
@@ -143,7 +143,7 @@ def main():
         except nxppy.SelectError:
             pass
 
-        logger.info(GPIO.input(BUTTON_PREV))
+        logger.info(GPIO.input(BUTTON_PAUSE))
         # logger.info(GPIO.input(BUTTON_PAUSE))
 
         time.sleep(0.2)
