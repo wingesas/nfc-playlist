@@ -13,9 +13,9 @@ MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 
 # GPIO buttons
-BUTTON_PREV = 7
-BUTTON_NEXT = 8
+BUTTON_PREV = 18
 BUTTON_PAUSE = 13
+BUTTON_NEXT = 7
 
 doPause = True
 
@@ -65,7 +65,7 @@ def setup_gpio():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(7, GPIO.IN, GPIO.PUD_UP)
     GPIO.setup(11, GPIO.IN, GPIO.PUD_UP)
-    GPIO.setup(15, GPIO.IN, GPIO.PUD_UP)
+    # GPIO.setup(15, GPIO.IN, GPIO.PUD_UP)
 
     # GPIO.setup(10, GPIO.IN, GPIO.PUD_UP)
     # GPIO.setup(18, GPIO.IN, GPIO.PUD_UP)

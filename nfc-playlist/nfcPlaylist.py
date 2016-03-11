@@ -7,6 +7,7 @@ import nxppy
 import json
 import os
 import mpd
+import RPi.GPIO as GPIO
 from logging.handlers import RotatingFileHandler
 
 # defaults
@@ -14,7 +15,47 @@ LOG_FILENAME = "/var/log/nfcPlaylist.log"
 MPD_HOST = "raspi2"
 MPD_PORT = "6600"
 
+# GPIO buttons
+BUTTON_PREV = 18
+BUTTON_PAUSE = 13
+BUTTON_NEXT = 7
+
 logger = logging.getLogger(__name__)
+
+def button_pressed_event(channel):
+    if channel == BUTTON_PREV and GPIO.input(channel) == 1:
+        client = mpd.MPDClient()
+        client.connect(MPD_HOST, MPD_PORT)
+        logger.info('button prev pressed')
+        client.previous()
+        client.close()
+        client.disconnect()
+
+    if channel == BUTTON_PAUSE and GPIO.input(channel) == 1:
+        client = mpd.MPDClient()
+        client.connect(MPD_HOST, MPD_PORT)
+        logger.info('button pause pressed')
+        client.pause()
+        client.close()
+        client.disconnect()
+
+    if channel == BUTTON_NEXT and GPIO.input(channel) == 0:
+        client = mpd.MPDClient()
+        client.connect(MPD_HOST, MPD_PORT)
+        logger.info('button next pressed')
+        client.next()
+        client.close()
+        client.disconnect()
+
+def setup_gpio():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_DOWN)
+    GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_DOWN)
+    GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
+
+    GPIO.add_event_detect(BUTTON_PREV, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
 
 def setup_logging():
     logger.setLevel(logging.INFO)
@@ -47,7 +88,8 @@ def main():
         data = json.load(dataFile)
 
     mifare = nxppy.Mifare()
-    uid = None
+    setup_gpio()
+
     uidCurrent = None  # current uid of detected card
     logger.info('ready - waiting for mifare ...')
 
@@ -55,9 +97,9 @@ def main():
         try:
             uid = mifare.select()
         except nxppy.SelectError:
-            pass
+            uid = None
 
-        if uidCurrent != uid and uid is not None:  # not same card as before?
+        if uid is not None and uidCurrent != uid:  # not same card as before?
             uidCurrent = uid
             logger.info("uid: " + str(uid))
 
