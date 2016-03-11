@@ -95,15 +95,15 @@ def main():
     with open(fileName) as dataFile:
         data = json.load(dataFile)
 
-    # mifare = nxppy.Mifare()
+    mifare = nxppy.Mifare()
 
     uidCurrent = None  # current uid of detected card
     logger.info('ready - waiting for mifare ...')
 
     while True:
         try:
-            # uid = mifare.select()
-            uid = None
+            uid = mifare.select()
+
             if uid is not None and uidCurrent != uid:  # not same card as before?
                 uidCurrent = uid
                 logger.info("uid: " + str(uid))
