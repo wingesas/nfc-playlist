@@ -54,9 +54,9 @@ def setup_gpio():
     GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
     GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 
-    GPIO.add_event_detect(BUTTON_PREV, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    # GPIO.add_event_detect(BUTTON_PREV, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    # GPIO.add_event_detect(BUTTON_PAUSE, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    # GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
 
 def setup_logging():
     logger.setLevel(logging.INFO)
@@ -82,12 +82,6 @@ def setup_logging():
 def main():
     setup_logging()
     setup_gpio()
-
-    try:
-        while False:
-            time.sleep(0.2)
-    finally:
-        GPIO.cleanup()
 
     # read json file which contains key/value pairs of card id and playlist name
     fileName = os.path.join(os.path.dirname(__file__), 'data.json')
@@ -139,6 +133,9 @@ def main():
                     data.update({uid: '__TODO__'})
                     with open(fileName, 'w') as outFile:
                         json.dump(data, outFile, indent=4)
+
+            print GPIO.input(BUTTON_PREV)
+            print GPIO.input(BUTTON_PAUSE)
 
         except nxppy.SelectError:
             pass
