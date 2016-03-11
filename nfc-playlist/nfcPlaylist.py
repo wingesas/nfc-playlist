@@ -84,8 +84,8 @@ def main():
     setup_gpio()
 
     while True:
-        logger.info(GPIO.input(BUTTON_PREV))
-        # logger.info(GPIO.input(BUTTON_PAUSE))
+        # logger.info(GPIO.input(BUTTON_PREV))
+        logger.info(GPIO.input(BUTTON_PAUSE))
 
         time.sleep(0.2)
 
