@@ -50,7 +50,7 @@ def button_pressed_event(channel):
 
 def setup_gpio():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(BUTTON_PREV, GPIO.IN, GPIO.PUD_DOWN)
+    GPIO.setup(BUTTON_PREV, GPIO.IN)
     GPIO.setup(BUTTON_PAUSE, GPIO.IN, GPIO.PUD_UP)
     GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 
@@ -137,8 +137,8 @@ def main():
         except nxppy.SelectError:
             pass
 
-        # logger.info(GPIO.input(BUTTON_PREV))
-        logger.info(GPIO.input(BUTTON_PAUSE))
+        logger.info(GPIO.input(BUTTON_PREV))
+        # logger.info(GPIO.input(BUTTON_PAUSE))
 
         time.sleep(0.2)
 
