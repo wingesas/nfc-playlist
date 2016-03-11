@@ -23,6 +23,7 @@ BUTTON_NEXT = 7
 logger = logging.getLogger(__name__)
 
 def button_pressed_event(channel):
+    logger.info('button_pressed_event')
     if channel == BUTTON_PREV and GPIO.input(channel) == 1:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
@@ -80,6 +81,7 @@ def setup_logging():
 
 def main():
     setup_logging()
+    setup_gpio()
 
     # read json file which contains key/value pairs of card id and playlist name
     fileName = os.path.join(os.path.dirname(__file__), 'data.json')
@@ -88,7 +90,6 @@ def main():
         data = json.load(dataFile)
 
     mifare = nxppy.Mifare()
-    setup_gpio()
 
     uidCurrent = None  # current uid of detected card
     logger.info('ready - waiting for mifare ...')
@@ -96,44 +97,45 @@ def main():
     while True:
         try:
             uid = mifare.select()
-        except nxppy.SelectError:
-            uid = None
 
-        if uid is not None and uidCurrent != uid:  # not same card as before?
-            uidCurrent = uid
-            logger.info("uid: " + str(uid))
+            if uid is not None and uidCurrent != uid:  # not same card as before?
+                uidCurrent = uid
+                logger.info("uid: " + str(uid))
 
-            if uid in data.keys():
-                client = mpd.MPDClient()
-                client.connect(MPD_HOST, MPD_PORT)
-                client.clear()
-                client.load("beep")
-                client.play()
-                client.clear()
-
-                # call mpc with data[uid]
-                playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
-                method = data[uid].get("method") if hasattr(data[uid], "get") else "load"
-                logger.info("playlist: " + str(playlist))
-
-                try:
-                    if (method == "load"):
-                        client.load(playlist)
-                    else:
-                        client.add(playlist)
-
+                if uid in data.keys():
+                    client = mpd.MPDClient()
+                    client.connect(MPD_HOST, MPD_PORT)
+                    client.clear()
+                    client.load("beep")
                     client.play()
-                except mpd.CommandError, e:
-                    logger.error("CommandError " + str(e))
+                    client.clear()
 
-                # shutdown
-                client.close()
-                client.disconnect()
-            else:
-                # insert new uid to file
-                data.update({uid: '__TODO__'})
-                with open(fileName, 'w') as outFile:
-                    json.dump(data, outFile, indent=4)
+                    # call mpc with data[uid]
+                    playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
+                    method = data[uid].get("method") if hasattr(data[uid], "get") else "load"
+                    logger.info("playlist: " + str(playlist))
+
+                    try:
+                        if (method == "load"):
+                            client.load(playlist)
+                        else:
+                            client.add(playlist)
+
+                        client.play()
+                    except mpd.CommandError, e:
+                        logger.error("CommandError " + str(e))
+
+                    # shutdown
+                    client.close()
+                    client.disconnect()
+                else:
+                    # insert new uid to file
+                    data.update({uid: '__TODO__'})
+                    with open(fileName, 'w') as outFile:
+                        json.dump(data, outFile, indent=4)
+
+        except nxppy.SelectError:
+            pass
 
         time.sleep(0.2)
 
