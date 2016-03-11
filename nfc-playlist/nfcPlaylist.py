@@ -84,7 +84,7 @@ def main():
     setup_gpio()
 
     try:
-        while True:
+        while False:
             time.sleep(0.2)
     finally:
         GPIO.cleanup()
