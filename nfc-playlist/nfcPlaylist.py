@@ -134,11 +134,11 @@ def main():
                     with open(fileName, 'w') as outFile:
                         json.dump(data, outFile, indent=4)
 
-            print GPIO.input(BUTTON_PREV)
-            print GPIO.input(BUTTON_PAUSE)
-
         except nxppy.SelectError:
             pass
+
+        logger.info(GPIO.input(BUTTON_PREV))
+        # logger.info(GPIO.input(BUTTON_PAUSE))
 
         time.sleep(0.2)
 
