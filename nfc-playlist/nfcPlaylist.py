@@ -96,8 +96,8 @@ def main():
 
     while True:
         try:
-            uid = mifare.select()
-
+            # uid = mifare.select()
+            uid = None
             if uid is not None and uidCurrent != uid:  # not same card as before?
                 uidCurrent = uid
                 logger.info("uid: " + str(uid))
