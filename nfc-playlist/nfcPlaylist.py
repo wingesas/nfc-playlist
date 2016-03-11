@@ -83,6 +83,9 @@ def main():
     setup_logging()
     setup_gpio()
 
+    while True:
+        time.sleep(0.2)
+
     # read json file which contains key/value pairs of card id and playlist name
     fileName = os.path.join(os.path.dirname(__file__), 'data.json')
 
