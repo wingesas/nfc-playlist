@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 def button_pressed_event(channel):
     logger.info('button_pressed_event')
-    if channel == BUTTON_PREV and GPIO.input(channel) == 1:
+    if channel == BUTTON_PREV and GPIO.input(channel) == 0:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
         logger.info('button prev pressed')
@@ -32,7 +32,7 @@ def button_pressed_event(channel):
         client.close()
         client.disconnect()
 
-    if channel == BUTTON_PAUSE and GPIO.input(channel) == 1:
+    if channel == BUTTON_PAUSE and GPIO.input(channel) == 0:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
         logger.info('button pause pressed')
