@@ -17,7 +17,7 @@ MPD_PORT = "6600"
 
 # GPIO buttons
 BUTTON_PREV = 8
-BUTTON_PAUSE = 13
+BUTTON_PAUSE = 10
 BUTTON_NEXT = 7
 
 logger = logging.getLogger(__name__)
@@ -55,8 +55,8 @@ def setup_gpio():
     GPIO.setup(BUTTON_NEXT, GPIO.IN, GPIO.PUD_UP)
 
     GPIO.add_event_detect(BUTTON_PREV, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    # GPIO.add_event_detect(BUTTON_PAUSE, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
-    # GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_PAUSE, GPIO.RISING, callback=button_pressed_event, bouncetime=500)  # 500ms
+    GPIO.add_event_detect(BUTTON_NEXT, GPIO.FALLING, callback=button_pressed_event, bouncetime=500)  # 500ms
 
 def setup_logging():
     logger.setLevel(logging.INFO)
@@ -143,7 +143,7 @@ def main():
         except nxppy.SelectError:
             pass
 
-        logger.info(GPIO.input(BUTTON_PREV))
+        # logger.info(GPIO.input(BUTTON_PREV))
         # logger.info(GPIO.input(BUTTON_PAUSE))
 
         time.sleep(0.2)
