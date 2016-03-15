@@ -106,14 +106,12 @@ def main():
 
             if uid is not None and uidCurrent != uid:  # not same card as before?
                 uidCurrent = uid
+                i = 0
                 logger.info("uid: " + str(uid))
 
                 if uid in data.keys():
                     client = mpd.MPDClient()
                     client.connect(MPD_HOST, MPD_PORT)
-                    client.clear()
-                    client.load("beep")
-                    client.play()
                     client.clear()
 
                     # call mpc with data[uid]
@@ -147,11 +145,23 @@ def main():
         i += 1
 
         if i == (5 * 60):  # 1 minute
-            logger.info("tick")
+            if uidCurrent is not None:
+                uidCurrent = None
+
+            client = mpd.MPDClient()
+            client.connect(MPD_HOST, MPD_PORT)
+
+            if client.status()['state'] == 'pause':
+                logger.info('switch from pause to stop')
+                client.stop()
+                client.clear()
+
+            client.close()
+            client.disconnect()
             i = 0
 
 if __name__ == "__main__":
     try:
         main()
     except Exception, e:
-        logger.error(str(e))
+        logger.error("Exception " + str(e))
