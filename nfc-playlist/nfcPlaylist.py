@@ -144,8 +144,10 @@ def main():
         time.sleep(0.2)
         i += 1
 
-        if i == (5 * 60):  # 1 minute
+        if i == (5 * 60 * 5):  # 5 minutes
+            i = 0
             if uidCurrent is not None:
+                logger.info('reset uidCurrent')
                 uidCurrent = None
 
             client = mpd.MPDClient()
@@ -158,7 +160,6 @@ def main():
 
             client.close()
             client.disconnect()
-            i = 0
 
 if __name__ == "__main__":
     try:
