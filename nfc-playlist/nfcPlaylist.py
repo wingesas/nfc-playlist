@@ -26,8 +26,11 @@ def button_pressed_event(channel):
     if channel == BUTTON_PREV and GPIO.input(channel) == 0:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
-        logger.info('button prev pressed')
-        client.previous()
+
+        if client.status()['state'] == 'play':
+            logger.info('button prev pressed')
+            client.previous()
+
         client.close()
         client.disconnect()
 
@@ -42,8 +45,11 @@ def button_pressed_event(channel):
     if channel == BUTTON_NEXT and GPIO.input(channel) == 0:
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
-        logger.info('button next pressed')
-        client.next()
+
+        if client.status()['state'] == 'play':
+            logger.info('button next pressed')
+            client.next()
+
         client.close()
         client.disconnect()
 
@@ -91,6 +97,7 @@ def main():
     mifare = nxppy.Mifare()
 
     uidCurrent = None  # current uid of detected card
+    i = 0
     logger.info('ready - waiting for mifare ...')
 
     while True:
@@ -137,6 +144,14 @@ def main():
             pass
 
         time.sleep(0.2)
+        i += 1
+
+        if i == (5 * 60):  # 1 minute
+            logger.info("tick")
+            i = 0
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception, e:
+        logger.error(str(e))
