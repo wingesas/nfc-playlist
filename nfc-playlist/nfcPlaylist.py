@@ -20,6 +20,8 @@ BUTTON_PREV = 8
 BUTTON_PAUSE = 10
 BUTTON_NEXT = 7
 
+isPause = False
+
 logger = logging.getLogger(__name__)
 
 def button_pressed_event(channel):
@@ -35,6 +37,8 @@ def button_pressed_event(channel):
         client.disconnect()
 
     if channel == BUTTON_PAUSE and GPIO.input(channel) == 0:
+        global isPause
+        isPause = True
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
         logger.info('button pause pressed')
@@ -100,6 +104,8 @@ def main():
     i = 0
     logger.info('ready - waiting for mifare ...')
 
+    isPause = False
+
     while True:
         try:
             uid = mifare.select()
@@ -150,16 +156,18 @@ def main():
                 logger.info('reset uidCurrent')
                 uidCurrent = None
 
-            client = mpd.MPDClient()
-            client.connect(MPD_HOST, MPD_PORT)
+            if isPause is True:
+                isPause = False
+                client = mpd.MPDClient()
+                client.connect(MPD_HOST, MPD_PORT)
 
-            if client.status()['state'] == 'pause':
-                logger.info('switch from pause to stop')
-                client.stop()
-                client.clear()
+                if client.status()['state'] == 'pause':
+                    logger.info('switch from pause to stop')
+                    client.stop()
+                    client.clear()
 
-            client.close()
-            client.disconnect()
+                client.close()
+                client.disconnect()
 
 if __name__ == "__main__":
     try:
