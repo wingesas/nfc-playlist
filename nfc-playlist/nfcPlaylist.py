@@ -38,11 +38,15 @@ def button_pressed_event(channel):
 
     if channel == BUTTON_PAUSE and GPIO.input(channel) == 0:
         global isPause
-        isPause = True
+        logger.info('button pause pressed')
+
         client = mpd.MPDClient()
         client.connect(MPD_HOST, MPD_PORT)
-        logger.info('button pause pressed')
-        client.pause()
+
+        if client.status()['state'] == 'play':
+            isPause = True
+
+        client.pause()  # Toggles pause/resumes playing
         client.close()
         client.disconnect()
 

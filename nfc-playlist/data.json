@@ -22,5 +22,8 @@
     "04E39A1A0A4080": "Pearl Jam - Ten",
     "042A991A0A4080": "Pink - Funhouse: The Tour Edition",
     "04C49A1A0A4080": "Sigue Sigue Sputnik - 21st Century Boys : The Best",
-    "0486991A0A4080": "Skid Row - Skid Row"
+    "0486991A0A4080": {
+        "playlist": "http://streams.radiobob.de/bob-shlive/mp3-192/mediaplayer/",
+        "method": "add"
+    }
 }
