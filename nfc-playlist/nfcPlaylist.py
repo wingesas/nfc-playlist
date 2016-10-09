@@ -127,7 +127,7 @@ def main():
                     # call mpc with data[uid]
                     playlist = data[uid].get("playlist") if hasattr(data[uid], "get") else data[uid]
                     method = data[uid].get("method") if hasattr(data[uid], "get") else "load"
-                    logger.info("playlist: " + str(playlist))
+                    logger.info("playlist: " + playlist.encode('utf-8'))
 
                     try:
                         if (method == "load"):
